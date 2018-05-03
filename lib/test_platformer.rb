@@ -39,10 +39,10 @@ module TestPlatformer
     end
 
     def update(move_x)
-      if (@vy < 0)
-        @pose = @jump
-      else
+      if (self.floor?)
         @pose = @stand
+      else
+        @pose = @jump
       end
       # Directional walking, horizontal movement
       if move_x > 0
@@ -60,7 +60,7 @@ module TestPlatformer
       #Vertical movement
 
       if @vy > 0
-        @vy.times { @y += 1} until self.floor?
+        @vy.times { if !(self.floor?) then @y += 1 else @vy = 0 end }
       end
       if @vy < 0
         (-@vy).times {  @y -= 1 }
