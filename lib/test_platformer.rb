@@ -12,6 +12,7 @@ module TestPlatformer
       @stand = Gosu::Image.new('./assets/images/sonic_stand.png')
       @jump = Gosu::Image.new('./assets/images/sonic_jump.gif')
       @run = Gosu::Image.new('./assets/images/sonic_run.gif')
+      @jumpsound = Gosu::Sample.new("./assets/sounds/jump_sound.mp3")
       @pose = @stand
     end
 
@@ -28,6 +29,7 @@ module TestPlatformer
 
     def draw
       # @image.draw(@x, @y, 0, 0.3, 0.3)
+      if @pose == @stand || @pose == @jump
       if @dir == :right
         offs_x = -25
         factor = 0.3
@@ -36,14 +38,28 @@ module TestPlatformer
         factor = -0.3
       end
       @pose.draw(@x + offs_x, @y - 49, 0, factor, 0.3)
+    else
+      if @dir == :right
+        offs_x = -25
+        factor = 0.45
+      else
+        offs_x = 25
+        factor = -0.45
+      end
+      @pose.draw(@x + offs_x, @y - 49, 0, factor, 0.6)
+    end
     end
 
     def update(move_x)
-      if (self.floor?)
+      #choose sprite image based on movement
+      if (self.floor?) && (move_x == 0)
         @pose = @stand
-      else
+      elsif (@vy < 0)
         @pose = @jump
+      elsif (self.floor?) && ((move_x > 0) || (move_x < 0))
+        @pose = @run
       end
+
       # Directional walking, horizontal movement
       if move_x > 0
         @dir = :right
@@ -68,7 +84,10 @@ module TestPlatformer
 
     end
     def jump
-      @vy = -20
+      if @vy == 0
+        @vy = -20
+        @jumpsound.play
+      end
     end
   end
 
