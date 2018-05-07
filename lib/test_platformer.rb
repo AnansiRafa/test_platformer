@@ -17,7 +17,7 @@ module TestPlatformer
     end
 
     def floor?
-      self.y === 333
+      self.y === 375
     end
 
     def warp(x,y)
@@ -28,25 +28,25 @@ module TestPlatformer
     end
 
     def draw
-      # @image.draw(@x, @y, 0, 0.3, 0.3)
+      # @image.draw(x, y, z, scale_x = 1, scale_y = 1, color = 0xff_ffffff, mode = :default)
       if @pose == @stand || @pose == @jump
       if @dir == :right
-        offs_x = -25
-        factor = 0.3
+        offs_x = -50
+        x_factor = 0.2
       else
-        offs_x = 25
-        factor = -0.3
+        offs_x = 50
+        x_factor = -0.2
       end
-      @pose.draw(@x + offs_x, @y - 49, 0, factor, 0.3)
+      @pose.draw(@x + offs_x, @y - 49, 0, x_factor, 0.2)
     else
       if @dir == :right
-        offs_x = -25
-        factor = 0.45
+        offs_x = -50
+        x_factor = 0.35
       else
-        offs_x = 25
-        factor = -0.45
+        offs_x = 50
+        x_factor = -0.35
       end
-      @pose.draw(@x + offs_x, @y - 49, 0, factor, 0.6)
+      @pose.draw(@x + offs_x, @y - 49, 0, x_factor, 0.40)
     end
     end
 
@@ -58,6 +58,8 @@ module TestPlatformer
         @pose = @jump
       elsif (self.floor?) && ((move_x > 0) || (move_x < 0))
         @pose = @run
+      else
+        @pose = @jump
       end
 
       # Directional walking, horizontal movement
@@ -86,7 +88,7 @@ module TestPlatformer
     def jump
       if @vy == 0
         @vy = -20
-        @jumpsound.play
+        # @jumpsound.play
       end
     end
   end
@@ -97,7 +99,7 @@ module TestPlatformer
       super 700, 480
       self.caption = "Testing..."
       @sonic = Player.new
-      @sonic.warp(70, 333)
+      @sonic.warp(70, 200)
     end
 
     def update
