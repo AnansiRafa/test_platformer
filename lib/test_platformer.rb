@@ -17,7 +17,7 @@ module TestPlatformer
     end
 
     def floor?
-      self.y === 375
+      self.y === 400
     end
 
     def warp(x,y)
@@ -88,7 +88,7 @@ module TestPlatformer
     def jump
       if @vy == 0
         @vy = -20
-        # @jumpsound.play
+        @jumpsound.play
       end
     end
   end
@@ -98,25 +98,25 @@ module TestPlatformer
     def initialize
       super 700, 480
       self.caption = "Testing..."
-      @sonic = Player.new
-      @sonic.warp(70, 200)
+      @player = Player.new
+      @player.warp(70, 200)
     end
 
     def update
       move_x = 0
       move_x -= 5 if Gosu.button_down? Gosu::KB_LEFT
       move_x += 5 if Gosu.button_down? Gosu::KB_RIGHT
-      @sonic.update(move_x)
+      @player.update(move_x)
     end
 
     def draw
-      @sonic.draw
+      @player.draw
     end
 
     def button_down(id)
       case id
       when Gosu::KB_UP
-        @sonic.jump
+        @player.jump
       when Gosu::KB_ESCAPE
         close
       else
