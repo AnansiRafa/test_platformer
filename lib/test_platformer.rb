@@ -9,11 +9,12 @@ module TestPlatformer
     def initialize
       @x = @y = @vy = 0
       @dir = :right
-      @stand = Gosu::Image.new('./assets/images/sonic_stand.png')
-      @jump = Gosu::Image.new('./assets/images/sonic_jump.gif')
-      @run = Gosu::Image.new('./assets/images/sonic_run.gif')
-      @jumpsound = Gosu::Sample.new("./assets/sounds/jump_sound.mp3")
-      @pose = @stand
+      # @stand = Gosu::Image.new('./assets/images/sonic_stand.png')
+      # @jump = Gosu::Image.new('./assets/images/sonic_jump.gif')
+      # @run = Gosu::Image.new('./assets/images/sonic_run.gif')
+       @jumpsound = Gosu::Sample.new("./assets/sounds/jump_sound.mp3")
+      @stand = *Gosu::Image.load_tiles("./assets/images/mayan.png", 42, 120)
+      @pose = @stand[Gosu.milliseconds / 100 % @stand.size]
     end
 
     def floor?
@@ -29,38 +30,27 @@ module TestPlatformer
 
     def draw
       # @image.draw(x, y, z, scale_x = 1, scale_y = 1, color = 0xff_ffffff, mode = :default)
-      if @pose == @stand || @pose == @jump
       if @dir == :right
-        offs_x = -50
-        x_factor = 0.2
+        offs_x = -20
+        x_factor = 0.8
       else
-        offs_x = 50
-        x_factor = -0.2
+        offs_x = 20
+        x_factor = -0.8
       end
-      @pose.draw(@x + offs_x, @y - 49, 0, x_factor, 0.2)
-    else
-      if @dir == :right
-        offs_x = -50
-        x_factor = 0.35
-      else
-        offs_x = 50
-        x_factor = -0.35
-      end
-      @pose.draw(@x + offs_x, @y - 49, 0, x_factor, 0.40)
-    end
+      @pose.draw(@x + offs_x, @y - 49, 0, x_factor, 0.8)
     end
 
     def update(move_x)
       #choose sprite image based on movement
-      if (self.floor?) && (move_x == 0)
-        @pose = @stand
-      elsif (@vy < 0)
-        @pose = @jump
-      elsif (self.floor?) && ((move_x > 0) || (move_x < 0))
-        @pose = @run
-      else
-        @pose = @jump
-      end
+      # if (self.floor?) && (move_x == 0)
+      #   @pose = @stand
+      # elsif (@vy < 0)
+      #   @pose = @jump
+      # elsif (self.floor?) && ((move_x > 0) || (move_x < 0))
+      #   @pose = @run
+      # else
+      #   @pose = @jump
+      # end
 
       # Directional walking, horizontal movement
       if move_x > 0
